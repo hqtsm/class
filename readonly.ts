@@ -24,7 +24,7 @@ type IfEqual<A, B, T, F> = (
  *
  * @template T Type.
  */
-export type Readonlys<T extends object> = {
+export type ReadonlyKeys<T extends object> = {
 	[K in keyof T]-?: IfEqual<
 		{ [P in K]: T[K] },
 		{ -readonly [P in K]: T[K] },

@@ -1,4 +1,4 @@
-import type { Readonlys } from './readonly.ts';
+import type { ReadonlyKeys } from './readonly.ts';
 
 type IsEqual<X, Y> = (
 	<E>() => E extends X ? 1 : 2
@@ -17,7 +17,7 @@ const staticRequiredRO = Symbol();
 const staticOptionalRW = Symbol();
 const staticOptionalRO = Symbol();
 
-Deno.test('Readonlys: interface', () => {
+Deno.test('ReadonlyKeys: interface', () => {
 	interface Properties {
 		requiredRW: number;
 		optionalRW?: number;
@@ -29,7 +29,7 @@ Deno.test('Readonlys: interface', () => {
 		readonly [optionalRO]?: number;
 	}
 	void (true satisfies IsEqual<
-		Readonlys<Properties>,
+		ReadonlyKeys<Properties>,
 		| 'requiredRO'
 		| 'optionalRO'
 		| typeof requiredRO
@@ -39,15 +39,15 @@ Deno.test('Readonlys: interface', () => {
 	interface IndexRW {
 		[index: number]: number;
 	}
-	void (true satisfies IsEqual<Readonlys<IndexRW>, never>);
+	void (true satisfies IsEqual<ReadonlyKeys<IndexRW>, never>);
 
 	interface IndexRO {
 		readonly [index: number]: number;
 	}
-	void (true satisfies IsEqual<Readonlys<IndexRO>, number>);
+	void (true satisfies IsEqual<ReadonlyKeys<IndexRO>, number>);
 });
 
-Deno.test('Readonlys: type', () => {
+Deno.test('ReadonlyKeys: type', () => {
 	type Properties = {
 		requiredRW: number;
 		optionalRW?: number;
@@ -59,7 +59,7 @@ Deno.test('Readonlys: type', () => {
 		readonly [optionalRO]?: number;
 	};
 	void (true satisfies IsEqual<
-		Readonlys<Properties>,
+		ReadonlyKeys<Properties>,
 		| 'requiredRO'
 		| 'optionalRO'
 		| typeof requiredRO
@@ -69,15 +69,15 @@ Deno.test('Readonlys: type', () => {
 	type IndexRW = {
 		[index: number]: number;
 	};
-	void (true satisfies IsEqual<Readonlys<IndexRW>, never>);
+	void (true satisfies IsEqual<ReadonlyKeys<IndexRW>, never>);
 
 	type IndexRO = {
 		readonly [index: number]: number;
 	};
-	void (true satisfies IsEqual<Readonlys<IndexRO>, number>);
+	void (true satisfies IsEqual<ReadonlyKeys<IndexRO>, number>);
 });
 
-Deno.test('Readonlys: concrete class', () => {
+Deno.test('ReadonlyKeys: concrete class', () => {
 	class Properties {
 		requiredRW = 0;
 		optionalRW?: number;
@@ -99,14 +99,14 @@ Deno.test('Readonlys: concrete class', () => {
 	}
 	void Properties;
 	void (true satisfies IsEqual<
-		Readonlys<Properties>,
+		ReadonlyKeys<Properties>,
 		| 'requiredRO'
 		| 'optionalRO'
 		| typeof requiredRO
 		| typeof optionalRO
 	>);
 	void (true satisfies IsEqual<
-		Readonlys<typeof Properties>,
+		ReadonlyKeys<typeof Properties>,
 		| 'staticRequiredRO'
 		| 'staticOptionalRO'
 		| typeof staticRequiredRO
@@ -117,16 +117,16 @@ Deno.test('Readonlys: concrete class', () => {
 		[index: number]: number;
 	}
 	void IndexRW;
-	void (true satisfies IsEqual<Readonlys<IndexRW>, never>);
+	void (true satisfies IsEqual<ReadonlyKeys<IndexRW>, never>);
 
 	class IndexRO {
 		readonly [index: number]: number;
 	}
 	void IndexRO;
-	void (true satisfies IsEqual<Readonlys<IndexRO>, number>);
+	void (true satisfies IsEqual<ReadonlyKeys<IndexRO>, number>);
 });
 
-Deno.test('Readonlys: abstract class', () => {
+Deno.test('ReadonlyKeys: abstract class', () => {
 	abstract class Properties {
 		requiredRW = 0;
 		optionalRW?: number;
@@ -148,14 +148,14 @@ Deno.test('Readonlys: abstract class', () => {
 	}
 	void Properties;
 	void (true satisfies IsEqual<
-		Readonlys<Properties>,
+		ReadonlyKeys<Properties>,
 		| 'requiredRO'
 		| 'optionalRO'
 		| typeof requiredRO
 		| typeof optionalRO
 	>);
 	void (true satisfies IsEqual<
-		Readonlys<typeof Properties>,
+		ReadonlyKeys<typeof Properties>,
 		| 'staticRequiredRO'
 		| 'staticOptionalRO'
 		| typeof staticRequiredRO
@@ -166,18 +166,18 @@ Deno.test('Readonlys: abstract class', () => {
 		[index: number]: number;
 	}
 	void IndexRW;
-	void (true satisfies IsEqual<Readonlys<IndexRW>, never>);
+	void (true satisfies IsEqual<ReadonlyKeys<IndexRW>, never>);
 
 	abstract class IndexRO {
 		readonly [index: number]: number;
 	}
 	void IndexRO;
-	void (true satisfies IsEqual<Readonlys<IndexRO>, number>);
+	void (true satisfies IsEqual<ReadonlyKeys<IndexRO>, number>);
 });
 
-Deno.test('Readonlys: function', () => {
+Deno.test('ReadonlyKeys: function', () => {
 	void (true satisfies IsEqual<
-		Readonlys<
+		ReadonlyKeys<
 			// deno-lint-ignore ban-types
 			Function
 		>,
@@ -185,7 +185,7 @@ Deno.test('Readonlys: function', () => {
 	>);
 
 	void (true satisfies IsEqual<
-		Readonlys<() => void>,
+		ReadonlyKeys<() => void>,
 		never
 	>);
 
@@ -193,13 +193,13 @@ Deno.test('Readonlys: function', () => {
 		return 0;
 	};
 	void (true satisfies IsEqual<
-		Readonlys<typeof func>,
+		ReadonlyKeys<typeof func>,
 		never
 	>);
 
 	const arrow = () => 0;
 	void (true satisfies IsEqual<
-		Readonlys<typeof arrow>,
+		ReadonlyKeys<typeof arrow>,
 		never
 	>);
 });

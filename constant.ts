@@ -4,7 +4,7 @@
  * Constant utilities.
  */
 
-import type { Readonlys } from './readonly.ts';
+import type { ReadonlyKeys } from './readonly.ts';
 
 /**
  * Define constant.
@@ -13,7 +13,7 @@ import type { Readonlys } from './readonly.ts';
  * @param obj Object.
  * @param key Key.
  */
-export function constant<T extends object>(obj: T, key: Readonlys<T>): void {
+export function constant<T extends object>(obj: T, key: ReadonlyKeys<T>): void {
 	Object.defineProperty(obj, key, {
 		value: obj[key],
 		configurable: false,
