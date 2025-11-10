@@ -60,6 +60,7 @@ jobs:
         with:
           name: docs
           path: docs
+          include-hidden-files: true
 
       - name: Linted
         run: deno task linted
@@ -99,6 +100,7 @@ jobs:
           path: |
             npm
             !npm/node_modules
+          include-hidden-files: true
 
   npm-prod:
     name: NPM prod
@@ -129,6 +131,7 @@ jobs:
           path: |
             npm
             !npm/node_modules
+          include-hidden-files: true
 
       - name: Check Publish
         working-directory: npm
