@@ -14,16 +14,6 @@ jobs:
       matrix:
         config:
           - deno-version: 2.5.x
-          - deno-version: 2.4.x
-          - deno-version: 2.2.x
-          - deno-version: 2.1.x
-            deno-lock: 0
-          - deno-version: 2.0.x
-            deno-lock: 0
-          - deno-version: 2.0.0
-            deno-lock: 0
-          - deno-version: 1.46.3
-            deno-lock: 0
 
     name: Deno ${{ matrix.config.deno-version }}
 
@@ -60,7 +50,7 @@ jobs:
       - name: Setup Deno
         uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
         with:
-          deno-version: 2.4.x
+          deno-version: 2.5.x
 
       - name: Docs
         run: deno task docs
@@ -92,7 +82,7 @@ jobs:
       - name: Setup Deno
         uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
         with:
-          deno-version: 2.4.x
+          deno-version: 2.5.x
 
       - name: Setup Node
         uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
@@ -122,7 +112,7 @@ jobs:
       - name: Setup Deno
         uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
         with:
-          deno-version: 2.4.x
+          deno-version: 2.5.x
 
       - name: Setup Node
         uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
@@ -152,8 +142,7 @@ jobs:
           - 24.x
           - 22.x
           - 20.x
-          - 18.x
-          - 18.12.0
+          - 20.9.0
 
     name: Node ${{ matrix.node-version }}
 
@@ -189,10 +178,6 @@ jobs:
       matrix:
         bun-version:
           - 1.3.2
-          - 1.2.23
-          - 1.1.45
-          - 1.0.36
-          - 1.0.0
 
     name: Bun ${{ matrix.bun-version }}
 
