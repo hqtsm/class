@@ -20,12 +20,12 @@ const staticOptionalRO = Symbol();
 Deno.test('Readonlys: interface', () => {
 	interface Properties {
 		requiredRW: number;
-		readonly requiredRO: number;
 		optionalRW?: number;
-		readonly optionalRO?: number;
 		[requiredRW]: number;
-		readonly [requiredRO]: number;
 		[optionalRW]?: number;
+		readonly requiredRO: number;
+		readonly optionalRO?: number;
+		readonly [requiredRO]: number;
 		readonly [optionalRO]?: number;
 	}
 	void (true satisfies IsEqual<
@@ -50,12 +50,12 @@ Deno.test('Readonlys: interface', () => {
 Deno.test('Readonlys: type', () => {
 	type Properties = {
 		requiredRW: number;
-		readonly requiredRO: number;
 		optionalRW?: number;
-		readonly optionalRO?: number;
 		[requiredRW]: number;
-		readonly [requiredRO]: number;
 		[optionalRW]?: number;
+		readonly requiredRO: number;
+		readonly optionalRO?: number;
+		readonly [requiredRO]: number;
 		readonly [optionalRO]?: number;
 	};
 	void (true satisfies IsEqual<
@@ -80,21 +80,21 @@ Deno.test('Readonlys: type', () => {
 Deno.test('Readonlys: concrete class', () => {
 	class Properties {
 		requiredRW = 0;
-		readonly requiredRO = 0;
 		optionalRW?: number;
-		readonly optionalRO?: number;
 		[requiredRW] = 0;
-		readonly [requiredRO] = 0;
 		[optionalRW]?: number;
+		readonly requiredRO = 0;
+		readonly optionalRO?: number;
+		readonly [requiredRO] = 0;
 		readonly [optionalRO]?: number;
 
 		static staticRequiredRW = 0;
-		static readonly staticRequiredRO = 0;
 		static staticOptionalRW?: number;
-		static readonly staticOptionalRO?: number;
 		static [staticRequiredRW] = 0;
-		static readonly [staticRequiredRO] = 0;
 		static [staticOptionalRW]?: number;
+		static readonly staticRequiredRO = 0;
+		static readonly staticOptionalRO?: number;
+		static readonly [staticRequiredRO] = 0;
 		static readonly [staticOptionalRO]?: number;
 	}
 	void Properties;
@@ -129,21 +129,21 @@ Deno.test('Readonlys: concrete class', () => {
 Deno.test('Readonlys: abstract class', () => {
 	abstract class Properties {
 		requiredRW = 0;
-		readonly requiredRO = 0;
 		optionalRW?: number;
-		readonly optionalRO?: number;
 		[requiredRW] = 0;
-		readonly [requiredRO] = 0;
 		[optionalRW]?: number;
+		readonly requiredRO = 0;
+		readonly optionalRO?: number;
+		readonly [requiredRO] = 0;
 		readonly [optionalRO]?: number;
 
 		static staticRequiredRW = 0;
-		static readonly staticRequiredRO = 0;
 		static staticOptionalRW?: number;
-		static readonly staticOptionalRO?: number;
 		static [staticRequiredRW] = 0;
-		static readonly [staticRequiredRO] = 0;
 		static [staticOptionalRW]?: number;
+		static readonly staticRequiredRO = 0;
+		static readonly staticOptionalRO?: number;
+		static readonly [staticRequiredRO] = 0;
 		static readonly [staticOptionalRO]?: number;
 	}
 	void Properties;
