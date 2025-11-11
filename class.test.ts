@@ -83,14 +83,14 @@ Deno.test('Concrete', () => {
 	{
 		// @ts-expect-error Class only.
 		// deno-lint-ignore ban-types
-		type Type = Concrete<Function>;
-		assert(true satisfies IsEqual<Type, never>);
+		type Bad = Concrete<Function>;
+		assert(true satisfies IsEqual<Bad, never>);
 	}
 
 	{
 		// @ts-expect-error Class only.
-		type Type = Concrete<() => void>;
-		assert(true satisfies IsEqual<Type, never>);
+		type Bad = Concrete<() => void>;
+		assert(true satisfies IsEqual<Bad, never>);
 	}
 });
 
@@ -173,14 +173,14 @@ Deno.test('Abstract', () => {
 	{
 		// @ts-expect-error Class only.
 		// deno-lint-ignore ban-types
-		type Type = Abstract<Function>;
-		assert(true satisfies IsEqual<Type, never>);
+		type Bad = Abstract<Function>;
+		assert(true satisfies IsEqual<Bad, never>);
 	}
 
 	{
 		// @ts-expect-error Class only.
-		type Type = Abstract<() => void>;
-		assert(true satisfies IsEqual<Type, never>);
+		type Bad = Abstract<() => void>;
+		assert(true satisfies IsEqual<Bad, never>);
 	}
 
 	{
@@ -189,11 +189,13 @@ Deno.test('Abstract', () => {
 		assert(o);
 	}
 
-	class Bad extends Base {
-		constructor() {
-			// @ts-expect-error Abstract.
-			super();
+	{
+		class BadSuper extends Base {
+			constructor() {
+				// @ts-expect-error Abstract.
+				super();
+			}
 		}
+		assert(BadSuper);
 	}
-	assert(Bad);
 });
