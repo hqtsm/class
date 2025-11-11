@@ -1,4 +1,4 @@
-import { assertEquals } from '@std/assert';
+import { assert, assertEquals } from '@std/assert';
 import { constant } from './constant.ts';
 
 type IsEqual<X, Y> = (
@@ -36,13 +36,13 @@ Deno.test('constant', () => {
 		}
 	}
 
-	void (true satisfies IsEqual<typeof Abstract['PUB'], 1>);
-	void (true satisfies IsEqual<typeof Abstract['PRO'], 2>);
-	void (true satisfies IsEqual<typeof Abstract['PRI'], 3>);
+	assert(true satisfies IsEqual<typeof Abstract['PUB'], 1>);
+	assert(true satisfies IsEqual<typeof Abstract['PRO'], 2>);
+	assert(true satisfies IsEqual<typeof Abstract['PRI'], 3>);
 
-	void (true satisfies IsEqual<typeof Concrete['PUB'], 1>);
-	void (true satisfies IsEqual<typeof Concrete['PRO'], 2>);
-	void (true satisfies IsEqual<typeof Concrete['PRI'], 3>);
+	assert(true satisfies IsEqual<typeof Concrete['PUB'], 1>);
+	assert(true satisfies IsEqual<typeof Concrete['PRO'], 2>);
+	assert(true satisfies IsEqual<typeof Concrete['PRI'], 3>);
 
 	assertEquals(Abstract.PUB, 1);
 	assertEquals(Abstract['PRO'], 2);

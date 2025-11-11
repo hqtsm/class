@@ -1,3 +1,4 @@
+import { assert } from '@std/assert';
 import type { ReadonlyKeys } from './readonly.ts';
 
 type IsEqual<X, Y> = (
@@ -28,23 +29,25 @@ Deno.test('ReadonlyKeys: interface', () => {
 		readonly [requiredRO]: number;
 		readonly [optionalRO]?: number;
 	}
-	void (true satisfies IsEqual<
-		ReadonlyKeys<Properties>,
-		| 'requiredRO'
-		| 'optionalRO'
-		| typeof requiredRO
-		| typeof optionalRO
-	>);
+	assert(
+		true satisfies IsEqual<
+			ReadonlyKeys<Properties>,
+			| 'requiredRO'
+			| 'optionalRO'
+			| typeof requiredRO
+			| typeof optionalRO
+		>,
+	);
 
 	interface IndexRW {
 		[index: number]: number;
 	}
-	void (true satisfies IsEqual<ReadonlyKeys<IndexRW>, never>);
+	assert(true satisfies IsEqual<ReadonlyKeys<IndexRW>, never>);
 
 	interface IndexRO {
 		readonly [index: number]: number;
 	}
-	void (true satisfies IsEqual<ReadonlyKeys<IndexRO>, number>);
+	assert(true satisfies IsEqual<ReadonlyKeys<IndexRO>, number>);
 });
 
 Deno.test('ReadonlyKeys: type', () => {
@@ -58,23 +61,25 @@ Deno.test('ReadonlyKeys: type', () => {
 		readonly [requiredRO]: number;
 		readonly [optionalRO]?: number;
 	};
-	void (true satisfies IsEqual<
-		ReadonlyKeys<Properties>,
-		| 'requiredRO'
-		| 'optionalRO'
-		| typeof requiredRO
-		| typeof optionalRO
-	>);
+	assert(
+		true satisfies IsEqual<
+			ReadonlyKeys<Properties>,
+			| 'requiredRO'
+			| 'optionalRO'
+			| typeof requiredRO
+			| typeof optionalRO
+		>,
+	);
 
 	type IndexRW = {
 		[index: number]: number;
 	};
-	void (true satisfies IsEqual<ReadonlyKeys<IndexRW>, never>);
+	assert(true satisfies IsEqual<ReadonlyKeys<IndexRW>, never>);
 
 	type IndexRO = {
 		readonly [index: number]: number;
 	};
-	void (true satisfies IsEqual<ReadonlyKeys<IndexRO>, number>);
+	assert(true satisfies IsEqual<ReadonlyKeys<IndexRO>, number>);
 });
 
 Deno.test('ReadonlyKeys: concrete class', () => {
@@ -97,33 +102,37 @@ Deno.test('ReadonlyKeys: concrete class', () => {
 		static readonly [staticRequiredRO] = 0;
 		static readonly [staticOptionalRO]?: number;
 	}
-	void Properties;
-	void (true satisfies IsEqual<
-		ReadonlyKeys<Properties>,
-		| 'requiredRO'
-		| 'optionalRO'
-		| typeof requiredRO
-		| typeof optionalRO
-	>);
-	void (true satisfies IsEqual<
-		ReadonlyKeys<typeof Properties>,
-		| 'staticRequiredRO'
-		| 'staticOptionalRO'
-		| typeof staticRequiredRO
-		| typeof staticOptionalRO
-	>);
+	assert(Properties);
+	assert(
+		true satisfies IsEqual<
+			ReadonlyKeys<Properties>,
+			| 'requiredRO'
+			| 'optionalRO'
+			| typeof requiredRO
+			| typeof optionalRO
+		>,
+	);
+	assert(
+		true satisfies IsEqual<
+			ReadonlyKeys<typeof Properties>,
+			| 'staticRequiredRO'
+			| 'staticOptionalRO'
+			| typeof staticRequiredRO
+			| typeof staticOptionalRO
+		>,
+	);
 
 	class IndexRW {
 		[index: number]: number;
 	}
-	void IndexRW;
-	void (true satisfies IsEqual<ReadonlyKeys<IndexRW>, never>);
+	assert(IndexRW);
+	assert(true satisfies IsEqual<ReadonlyKeys<IndexRW>, never>);
 
 	class IndexRO {
 		readonly [index: number]: number;
 	}
-	void IndexRO;
-	void (true satisfies IsEqual<ReadonlyKeys<IndexRO>, number>);
+	assert(IndexRO);
+	assert(true satisfies IsEqual<ReadonlyKeys<IndexRO>, number>);
 });
 
 Deno.test('ReadonlyKeys: abstract class', () => {
@@ -146,60 +155,72 @@ Deno.test('ReadonlyKeys: abstract class', () => {
 		static readonly [staticRequiredRO] = 0;
 		static readonly [staticOptionalRO]?: number;
 	}
-	void Properties;
-	void (true satisfies IsEqual<
-		ReadonlyKeys<Properties>,
-		| 'requiredRO'
-		| 'optionalRO'
-		| typeof requiredRO
-		| typeof optionalRO
-	>);
-	void (true satisfies IsEqual<
-		ReadonlyKeys<typeof Properties>,
-		| 'staticRequiredRO'
-		| 'staticOptionalRO'
-		| typeof staticRequiredRO
-		| typeof staticOptionalRO
-	>);
+	assert(Properties);
+	assert(
+		true satisfies IsEqual<
+			ReadonlyKeys<Properties>,
+			| 'requiredRO'
+			| 'optionalRO'
+			| typeof requiredRO
+			| typeof optionalRO
+		>,
+	);
+	assert(
+		true satisfies IsEqual<
+			ReadonlyKeys<typeof Properties>,
+			| 'staticRequiredRO'
+			| 'staticOptionalRO'
+			| typeof staticRequiredRO
+			| typeof staticOptionalRO
+		>,
+	);
 
 	abstract class IndexRW {
 		[index: number]: number;
 	}
-	void IndexRW;
-	void (true satisfies IsEqual<ReadonlyKeys<IndexRW>, never>);
+	assert(IndexRW);
+	assert(true satisfies IsEqual<ReadonlyKeys<IndexRW>, never>);
 
 	abstract class IndexRO {
 		readonly [index: number]: number;
 	}
-	void IndexRO;
-	void (true satisfies IsEqual<ReadonlyKeys<IndexRO>, number>);
+	assert(IndexRO);
+	assert(true satisfies IsEqual<ReadonlyKeys<IndexRO>, number>);
 });
 
 Deno.test('ReadonlyKeys: function', () => {
-	void (true satisfies IsEqual<
-		ReadonlyKeys<
-			// deno-lint-ignore ban-types
-			Function
+	assert(
+		true satisfies IsEqual<
+			ReadonlyKeys<
+				// deno-lint-ignore ban-types
+				Function
+			>,
+			'length' | 'name'
 		>,
-		'length' | 'name'
-	>);
+	);
 
-	void (true satisfies IsEqual<
-		ReadonlyKeys<() => void>,
-		never
-	>);
+	assert(
+		true satisfies IsEqual<
+			ReadonlyKeys<() => void>,
+			never
+		>,
+	);
 
 	const func = function (): number {
 		return 0;
 	};
-	void (true satisfies IsEqual<
-		ReadonlyKeys<typeof func>,
-		never
-	>);
+	assert(
+		true satisfies IsEqual<
+			ReadonlyKeys<typeof func>,
+			never
+		>,
+	);
 
 	const arrow = () => 0;
-	void (true satisfies IsEqual<
-		ReadonlyKeys<typeof arrow>,
-		never
-	>);
+	assert(
+		true satisfies IsEqual<
+			ReadonlyKeys<typeof arrow>,
+			never
+		>,
+	);
 });
