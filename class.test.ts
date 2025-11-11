@@ -8,194 +8,199 @@ type IsEqual<X, Y> = (
 ) ? true
 	: false;
 
-Deno.test('Concrete', () => {
-	abstract class Base {
-		public readonly a: number;
-		protected readonly b: number;
-		private readonly c: number;
+abstract class BaseA {
+	public readonly a: number;
+	protected readonly b: number;
+	private readonly c: number;
 
-		constructor(a: number, b: number, c?: number) {
-			this.a = a;
-			this.b = b;
-			this.c = c ?? 0;
-		}
-
-		values(): [number, number, number] {
-			return [this.a, this.b, this.c];
-		}
-
-		public static readonly PUB = 1;
-		protected static readonly PRO = 2;
-		private static readonly PRI = 3;
-
-		static values(): [number, number, number] {
-			return [this.PUB, this.PRO, this.PRI];
-		}
-
-		static new(): string {
-			return 'new';
-		}
+	constructor(a: number, b: number, c?: number) {
+		this.a = a;
+		this.b = b;
+		this.c = c ?? 0;
 	}
 
-	class Impl extends Base {}
-
-	{
-		const CB: Concrete<typeof Base> = Impl;
-
-		assert(true satisfies IsEqual<(typeof CB)['prototype'], Base>);
-		assert(
-			true satisfies IsEqual<
-				ConstructorParameters<typeof CB>,
-				[a: number, b: number, c?: number | undefined]
-			>,
-		);
-		assert(true satisfies IsEqual<InstanceType<typeof CB>, Impl>);
-
-		assertEquals((new CB(1, 2)).values(), [1, 2, 0]);
-		assertEquals((new CB(1, 2, 3)).values(), [1, 2, 3]);
-		assertEquals(CB.values(), [1, 2, 3]);
-		assertEquals(CB.new(), 'new');
+	values(): [number, number, number] {
+		return [this.a, this.b, this.c];
 	}
 
-	{
-		const CI: Concrete<typeof Impl> = Impl;
+	public static readonly PUB = 1;
+	protected static readonly PRO = 2;
+	private static readonly PRI = 3;
 
-		assert(true satisfies IsEqual<(typeof CI)['prototype'], Impl>);
-		assert(
-			true satisfies IsEqual<
-				ConstructorParameters<typeof CI>,
-				[a: number, b: number, c?: number | undefined]
-			>,
-		);
-		assert(true satisfies IsEqual<InstanceType<typeof CI>, Impl>);
-
-		assertEquals((new CI(1, 2)).values(), [1, 2, 0]);
-		assertEquals((new CI(1, 2, 3)).values(), [1, 2, 3]);
-		assertEquals(CI.values(), [1, 2, 3]);
-		assertEquals(CI.new(), 'new');
+	static values(): [number, number, number] {
+		return [this.PUB, this.PRO, this.PRI];
 	}
 
-	{
-		const CI: Concrete<typeof Impl> = Impl;
-		assert(new CI(1, 2));
+	static new(): string {
+		return 'new';
+	}
+}
+
+class BaseC {
+	public readonly a: number;
+	protected readonly b: number;
+	private readonly c: number;
+
+	constructor(a: number, b: number, c?: number) {
+		this.a = a;
+		this.b = b;
+		this.c = c ?? 0;
 	}
 
-	{
-		// @ts-expect-error Class only.
-		// deno-lint-ignore ban-types
-		type Bad = Concrete<Function>;
-		assert(true satisfies IsEqual<Bad, never>);
+	values(): [number, number, number] {
+		return [this.a, this.b, this.c];
 	}
 
-	{
-		// @ts-expect-error Class only.
-		type Bad = Concrete<() => void>;
-		assert(true satisfies IsEqual<Bad, never>);
+	public static readonly PUB = 1;
+	protected static readonly PRO = 2;
+	private static readonly PRI = 3;
+
+	static values(): [number, number, number] {
+		return [this.PUB, this.PRO, this.PRI];
 	}
+
+	static new(): string {
+		return 'new';
+	}
+}
+
+Deno.test('Concrete: abstract', () => {
+	class Impl extends BaseA {}
+	const CB: Concrete<typeof BaseA> = Impl;
+
+	assert(true satisfies IsEqual<(typeof CB)['prototype'], BaseA>);
+	assert(
+		true satisfies IsEqual<
+			ConstructorParameters<typeof CB>,
+			[a: number, b: number, c?: number | undefined]
+		>,
+	);
+	assert(true satisfies IsEqual<InstanceType<typeof CB>, Impl>);
+
+	assertEquals((new CB(1, 2)).values(), [1, 2, 0]);
+	assertEquals((new CB(1, 2, 3)).values(), [1, 2, 3]);
+	assertEquals(CB.values(), [1, 2, 3]);
+	assertEquals(CB.new(), 'new');
 });
 
-Deno.test('Abstract', () => {
-	class Real {
-		public readonly a: number;
-		protected readonly b: number;
-		private readonly c: number;
+Deno.test('Concrete: concrete', () => {
+	class Impl extends BaseA {}
+	const CI: Concrete<typeof Impl> = Impl;
 
-		constructor(a: number, b: number, c?: number) {
-			this.a = a;
-			this.b = b;
-			this.c = c ?? 0;
+	assert(true satisfies IsEqual<(typeof CI)['prototype'], Impl>);
+	assert(
+		true satisfies IsEqual<
+			ConstructorParameters<typeof CI>,
+			[a: number, b: number, c?: number | undefined]
+		>,
+	);
+	assert(true satisfies IsEqual<InstanceType<typeof CI>, Impl>);
+
+	assertEquals((new CI(1, 2)).values(), [1, 2, 0]);
+	assertEquals((new CI(1, 2, 3)).values(), [1, 2, 3]);
+	assertEquals(CI.values(), [1, 2, 3]);
+	assertEquals(CI.new(), 'new');
+});
+
+Deno.test('Concrete: new', () => {
+	class Impl extends BaseA {}
+	const CI: Concrete<typeof Impl> = Impl;
+	assert(new CI(1, 2));
+});
+
+Deno.test('Concrete: function', () => {
+	// @ts-expect-error Class only.
+	type Bad = Concrete<() => void>;
+	assert(true satisfies IsEqual<Bad, never>);
+});
+
+Deno.test('Concrete: super', () => {
+	const Base: Concrete<typeof BaseA> = class Base extends BaseA {};
+
+	class GoodSuper extends Base {
+		constructor() {
+			super(1, 2, 3);
 		}
+	}
+	assert(GoodSuper);
 
-		values(): [number, number, number] {
-			return [this.a, this.b, this.c];
-		}
-
-		public static readonly PUB = 1;
-		protected static readonly PRO = 2;
-		private static readonly PRI = 3;
-
-		static values(): [number, number, number] {
-			return [this.PUB, this.PRO, this.PRI];
-		}
-
-		static new(): string {
-			return 'new';
+	class BadSuper extends Base {
+		constructor() {
+			// @ts-expect-error Arguments.
+			super();
 		}
 	}
+	assert(BadSuper);
+});
 
-	const Base: Abstract<typeof Real> = Real;
+Deno.test('Abstract: abstract', () => {
+	const BaseA: Abstract<typeof BaseC> = BaseC;
+	class Impl extends BaseA {}
+	const CB: Concrete<typeof BaseA> = Impl;
 
-	class Impl extends Base {}
+	assert(true satisfies IsEqual<(typeof CB)['prototype'], BaseC>);
+	assert(
+		true satisfies IsEqual<
+			ConstructorParameters<typeof CB>,
+			[a: number, b: number, c?: number | undefined]
+		>,
+	);
+	assert(true satisfies IsEqual<InstanceType<typeof CB>, Impl>);
 
-	{
-		const CB: Concrete<typeof Base> = Impl;
+	assertEquals((new CB(1, 2)).values(), [1, 2, 0]);
+	assertEquals((new CB(1, 2, 3)).values(), [1, 2, 3]);
+	assertEquals(CB.values(), [1, 2, 3]);
+	assertEquals(CB.new(), 'new');
+});
 
-		assert(true satisfies IsEqual<(typeof CB)['prototype'], Real>);
-		assert(
-			true satisfies IsEqual<
-				ConstructorParameters<typeof CB>,
-				[a: number, b: number, c?: number | undefined]
-			>,
-		);
-		assert(true satisfies IsEqual<InstanceType<typeof CB>, Impl>);
+Deno.test('Abstract: concrete', () => {
+	const BaseA: Abstract<typeof BaseC> = BaseC;
+	class Impl extends BaseA {}
+	const CI: Concrete<typeof Impl> = Impl;
 
-		assertEquals((new CB(1, 2)).values(), [1, 2, 0]);
-		assertEquals((new CB(1, 2, 3)).values(), [1, 2, 3]);
-		assertEquals(CB.values(), [1, 2, 3]);
-		assertEquals(CB.new(), 'new');
-	}
+	assert(true satisfies IsEqual<(typeof CI)['prototype'], Impl>);
+	assert(
+		true satisfies IsEqual<
+			ConstructorParameters<typeof CI>,
+			[a: number, b: number, c?: number | undefined]
+		>,
+	);
+	assert(true satisfies IsEqual<InstanceType<typeof CI>, Impl>);
 
-	{
-		const CI: Concrete<typeof Impl> = Impl;
+	assertEquals((new CI(1, 2)).values(), [1, 2, 0]);
+	assertEquals((new CI(1, 2, 3)).values(), [1, 2, 3]);
+	assertEquals(CI.values(), [1, 2, 3]);
+	assertEquals(CI.new(), 'new');
+});
 
-		assert(true satisfies IsEqual<(typeof CI)['prototype'], Impl>);
-		assert(
-			true satisfies IsEqual<
-				ConstructorParameters<typeof CI>,
-				[a: number, b: number, c?: number | undefined]
-			>,
-		);
-		assert(true satisfies IsEqual<InstanceType<typeof CI>, Impl>);
+Deno.test('Abstract: new', () => {
+	const CB: Abstract<typeof BaseA> = BaseA;
+	// @ts-expect-error Abstract.
+	const o = new CB(1, 2);
+	assert(o);
+});
 
-		assertEquals((new CI(1, 2)).values(), [1, 2, 0]);
-		assertEquals((new CI(1, 2, 3)).values(), [1, 2, 3]);
-		assertEquals(CI.values(), [1, 2, 3]);
-		assertEquals(CI.new(), 'new');
-	}
+Deno.test('Abstract: function', () => {
+	// @ts-expect-error Class only.
+	type Bad = Abstract<() => void>;
+	assert(true satisfies IsEqual<Bad, never>);
+});
 
-	{
-		const CB: Abstract<typeof Base> = Base;
-		// @ts-expect-error Abstract.
-		const o = new CB(1, 2);
-		assert(o);
-	}
+Deno.test('Abstract: super', () => {
+	const Base: Abstract<typeof BaseC> = class Base extends BaseC {};
 
-	{
-		// @ts-expect-error Class only.
-		// deno-lint-ignore ban-types
-		type Bad = Abstract<Function>;
-		assert(true satisfies IsEqual<Bad, never>);
-	}
-
-	{
-		// @ts-expect-error Class only.
-		type Bad = Abstract<() => void>;
-		assert(true satisfies IsEqual<Bad, never>);
-	}
-
-	{
-		// @ts-expect-error Abstract.
-		const o = new Base();
-		assert(o);
-	}
-
-	{
-		class BadSuper extends Base {
-			constructor() {
-				// @ts-expect-error Abstract.
-				super();
-			}
+	class GoodSuper extends Base {
+		constructor() {
+			super(1, 2, 3);
 		}
-		assert(BadSuper);
 	}
+	assert(GoodSuper);
+
+	class BadSuper extends Base {
+		constructor() {
+			// @ts-expect-error Arguments.
+			super();
+		}
+	}
+	assert(BadSuper);
 });
