@@ -11,6 +11,7 @@
  * @template B Type B.
  * @template T Type if equal.
  * @template F Type if not equal.
+ * @returns Type T or F.
  */
 type IfEqual<A, B, T, F> = (
 	<E>() => E extends A ? 1 : 2
@@ -23,6 +24,7 @@ type IfEqual<A, B, T, F> = (
  * Readonly keys of type.
  *
  * @template T Type.
+ * @returns Readonly keys.
  */
 export type ReadonlyKeys<T extends object> = {
 	[K in keyof T]-?: IfEqual<

@@ -10,6 +10,7 @@
  * Convert a class to an abstract class.
  *
  * @template C Class.
+ * @returns Abstract class.
  */
 export type Abstract<
 	C extends abstract new (...args: any[]) => any,
@@ -21,6 +22,7 @@ export type Abstract<
  * Convert a class to a concrete class.
  *
  * @template C Class.
+ * @returns Concrete class.
  */
 export type Concrete<
 	C extends abstract new (...args: any[]) => any,
