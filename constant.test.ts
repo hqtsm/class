@@ -16,7 +16,7 @@ const desc = <T>(value: T) => ({
 });
 
 Deno.test('constant', () => {
-	class Abstract {
+	abstract class Abstract {
 		public static readonly PUB = 1;
 		protected static readonly PRO = 2;
 		private static readonly PRI = 3;
