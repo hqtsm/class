@@ -76,6 +76,11 @@ Deno.test('Concrete', () => {
 	}
 
 	{
+		const CI: Concrete<typeof Impl> = Impl;
+		assert(new CI(1, 2));
+	}
+
+	{
 		// @ts-expect-error Class only.
 		// deno-lint-ignore ban-types
 		type Type = Concrete<Function>;
@@ -156,6 +161,13 @@ Deno.test('Abstract', () => {
 		assertEquals((new CI(1, 2, 3)).values(), [1, 2, 3]);
 		assertEquals(CI.values(), [1, 2, 3]);
 		assertEquals(CI.new(), 'new');
+	}
+
+	{
+		const CB: Abstract<typeof Base> = Base;
+		// @ts-expect-error Abstract.
+		const o = new CB(1, 2);
+		assert(o);
 	}
 
 	{
