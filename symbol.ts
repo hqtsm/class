@@ -4,8 +4,6 @@
  * Symbol utilities.
  */
 
-// deno-lint-ignore-file ban-types
-
 import type { Class } from './class.ts';
 
 /**
@@ -14,10 +12,7 @@ import type { Class } from './class.ts';
  * @param C Class.
  * @param value String tag value.
  */
-export function toStringTag(
-	C: Class & { readonly prototype: Object },
-	value: string,
-): void {
+export function toStringTag(C: Class, value: string): void {
 	Object.defineProperty(C.prototype, Symbol.toStringTag, {
 		value,
 		configurable: true,
