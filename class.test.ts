@@ -226,6 +226,10 @@ Deno.test('Class: only', () => {
 	// @ts-expect-error Not a class.
 	const badObj = getToString({});
 	assertEquals(typeof badObj, 'function');
+
+	// @ts-expect-error Not a class.
+	const badNum = getToString(1);
+	assertEquals(typeof badNum, 'function');
 });
 
 Deno.test('Class: members', () => {
