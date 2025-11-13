@@ -216,9 +216,7 @@ Deno.test('Class: only', () => {
 	assertEquals(typeof getToString(class {}), 'function');
 
 	// @ts-expect-error Not a class.
-	const badFunc = getToString(function (): number {
-		return 1;
-	});
+	const badFunc = getToString(getToString);
 	assertEquals(typeof badFunc, 'function');
 
 	// @ts-expect-error Not a class.
@@ -231,12 +229,6 @@ Deno.test('Class: only', () => {
 });
 
 Deno.test('Class: members', () => {
-	/**
-	 * Get member of class.
-	 *
-	 * @param c Class.
-	 * @returns Member.
-	 */
 	function getPUB(c: Class<{ PUB: number }>): unknown {
 		return c.PUB;
 	}
