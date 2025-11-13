@@ -15,7 +15,7 @@
 export type Abstract<
 	C extends abstract new (...args: any[]) => any,
 > = C extends abstract new (...args: infer A) => infer R
-	? (abstract new (...args: A) => R) & C
+	? (abstract new (...args: A) => R) & Omit<C, never>
 	: never;
 
 /**
@@ -27,5 +27,5 @@ export type Abstract<
 export type Concrete<
 	C extends abstract new (...args: any[]) => any,
 > = C extends abstract new (...args: infer A) => infer R
-	? (new (...args: A) => R) & C
+	? (new (...args: A) => R) & Omit<C, never>
 	: never;
