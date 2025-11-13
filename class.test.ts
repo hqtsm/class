@@ -1,5 +1,5 @@
-import { assert, assertEquals } from '@std/assert';
-import type { Abstract, Concrete } from './class.ts';
+import { assert, assertEquals, assertInstanceOf } from '@std/assert';
+import type { Abstract, Class, Concrete } from './class.ts';
 
 type IsEqual<X, Y> = (
 	<E>() => E extends X ? 1 : 2
@@ -203,4 +203,165 @@ Deno.test('Abstract: super', () => {
 		}
 	}
 	assert(BadSuper);
+});
+
+Deno.test('Class: only', () => {
+	function getToString(c: Class): unknown {
+		return c.toString;
+	}
+
+	assertEquals(typeof getToString(BaseC), 'function');
+	assertEquals(typeof getToString(Object), 'function');
+	assertEquals(typeof getToString(Function), 'function');
+	assertEquals(typeof getToString(class {}), 'function');
+
+	// @ts-expect-error Not a class.
+	const badFunc = getToString(function (): number {
+		return 1;
+	});
+	assertEquals(typeof badFunc, 'function');
+
+	// @ts-expect-error Not a class.
+	const badArrow = getToString(() => 1);
+	assertEquals(typeof badArrow, 'function');
+
+	// @ts-expect-error Not a class.
+	const badObj = getToString({});
+	assertEquals(typeof badObj, 'function');
+});
+
+Deno.test('Class: members', () => {
+	/**
+	 * Get member of class.
+	 *
+	 * @param c Class.
+	 * @returns Member.
+	 */
+	function getPUB(c: Class<{ PUB: number }>): unknown {
+		return c.PUB;
+	}
+
+	assertEquals(getPUB(BaseA), 1);
+	assertEquals(getPUB(BaseC), 1);
+
+	class Bad {}
+
+	// @ts-expect-error Missing.
+	const bad = getPUB(Bad);
+	assertEquals(bad, undefined);
+});
+
+Deno.test('Class: constructor: concrete', () => {
+	class A {
+		declare public readonly ['constructor']: Class<typeof A>;
+		public a = 1;
+		public readonly value: string;
+		constructor(value: string) {
+			this.value = value;
+		}
+		public static A = 1;
+		public static new(): string {
+			return 'new';
+		}
+	}
+
+	class B extends A {
+		declare public readonly ['constructor']: Class<typeof B>;
+		public b = 2;
+		constructor(value: number) {
+			super(String(value));
+		}
+		public static B = 2;
+	}
+
+	class C extends B {
+		declare public readonly ['constructor']: typeof C;
+		public c = 3;
+		constructor(value: boolean) {
+			super(value ? 1 : 0);
+		}
+		public static C = 3;
+	}
+
+	const a: A = new A('a');
+	// @ts-expect-error Abstract.
+	const a2: A = new a.constructor('a');
+	assertInstanceOf(a, A);
+	assertInstanceOf(a2, A);
+	assertEquals(a.constructor.A, 1);
+	assertEquals(a.constructor.new(), 'new');
+
+	const b: B = new B(2);
+	// @ts-expect-error Abstract.
+	const b2: B = new b.constructor(2);
+	assertInstanceOf(b, B);
+	assertInstanceOf(b2, B);
+	assertEquals(b.constructor.B, 2);
+	assertEquals(b.constructor.new(), 'new');
+
+	const c: C = new C(true);
+	const c2: C = new c.constructor(true);
+	assertInstanceOf(c, C);
+	assertInstanceOf(c2, C);
+	assertEquals(c.constructor.C, 3);
+	assertEquals(c.constructor.new(), 'new');
+});
+
+Deno.test('Class: constructor: abstract', () => {
+	abstract class A {
+		declare public readonly ['constructor']: Class<typeof A>;
+		public a = 1;
+		public readonly value: string;
+		constructor(value: string) {
+			this.value = value;
+		}
+		public static A = 1;
+		public static new(): string {
+			return 'new';
+		}
+	}
+
+	class B extends A {
+		declare public readonly ['constructor']: Class<typeof B>;
+		public b = 2;
+		constructor(value: number) {
+			super(String(value));
+		}
+		public static B = 2;
+	}
+
+	abstract class C extends B {
+		declare public readonly ['constructor']: typeof C;
+		public c = 3;
+		constructor(value: boolean) {
+			super(value ? 1 : 0);
+		}
+		public static C = 3;
+	}
+
+	// @ts-expect-error Abstract.
+	const a: A = new A('a');
+	// @ts-expect-error Abstract.
+	const a2: A = new a.constructor('a');
+	assertInstanceOf(a, A);
+	assertInstanceOf(a2, A);
+	assertEquals(a.constructor.A, 1);
+	assertEquals(a.constructor.new(), 'new');
+
+	const b: B = new B(2);
+	// @ts-expect-error Abstract.
+	const b2: B = new b.constructor(2);
+	assertInstanceOf(b, B);
+	assertInstanceOf(b2, B);
+	assertEquals(b.constructor.B, 2);
+	assertEquals(b.constructor.new(), 'new');
+
+	// @ts-expect-error Abstract.
+	const c: C = new C(true);
+	// @ts-expect-error Abstract.
+	const c2: C = new c.constructor(true);
+	assertInstanceOf(c, C);
+	assertInstanceOf(c2, C);
+	assertEquals(c.constructor.C, 3);
+	assertEquals(c.constructor.new(), 'new');
 });
