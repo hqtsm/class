@@ -150,7 +150,7 @@ type Mixed = {
 	readonly c?: number;
 };
 
-type RO = ReadonlyKeys<Mixed>; // 'b' | 'c'
+type MixedKeysRO = ReadonlyKeys<Mixed>; // 'b' | 'c'
 ```
 
 ## `constant`
