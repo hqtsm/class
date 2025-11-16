@@ -39,4 +39,4 @@ export type Concrete<
 export type Class<C extends object = {}> =
 	& (abstract new (...args: any[]) => any)
 	& { readonly prototype: object }
-	& Omit<C, 'prototype'>;
+	& Omit<C, never>;
