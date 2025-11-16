@@ -7,6 +7,10 @@ Class utilities for strongly typed classes
 ![types](https://img.shields.io/badge/types-eee)
 ![readonly](https://img.shields.io/badge/readonly-eee)
 
+[![JSR](https://jsr.io/badges/@hqtsm/class)](https://jsr.io/@hqtsm/class)
+[![npm](https://img.shields.io/npm/v/@hqtsm/class.svg)](https://npmjs.com/package/@hqtsm/class)
+[![CI](https://github.com/hqtsm/class/actions/workflows/ci.yaml/badge.svg)](https://github.com/hqtsm/class/actions/workflows/ci.yaml)
+
 # Features
 
 - Pure TypeScript, run anywhere
