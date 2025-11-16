@@ -2,6 +2,11 @@
 
 Class utilities for strongly typed classes
 
+![class](https://img.shields.io/badge/class-eee)
+![constant](https://img.shields.io/badge/constant-eee)
+![types](https://img.shields.io/badge/types-eee)
+![readonly](https://img.shields.io/badge/readonly-eee)
+
 # Features
 
 - Pure TypeScript, run anywhere
