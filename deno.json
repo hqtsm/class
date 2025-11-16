@@ -3,7 +3,11 @@
 	"version": "0.0.0",
 	"license": "MIT",
 	"exports": {
-		".": "./mod.ts"
+		".": "./mod.ts",
+		"./class": "./class.ts",
+		"./constant": "./constant.ts",
+		"./readonly": "./readonly.ts",
+		"./symbol": "./symbol.ts"
 	},
 	"imports": {
 		"@deno/dnt": "jsr:@deno/dnt@^0.42.3",
