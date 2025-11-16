@@ -68,6 +68,8 @@ await build({
 	},
 	esModule: true,
 	scriptModule: false,
+	declaration: 'inline',
+	typeCheck: 'both',
 	compilerOptions: {
 		target: 'Latest',
 		lib: ['ESNext'],
