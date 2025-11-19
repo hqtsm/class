@@ -1,5 +1,5 @@
 import { assert, assertEquals, assertInstanceOf } from '@std/assert';
-import type { Abstract, Class, Concrete } from './class.ts';
+import type { Abstract, Class, Concrete, IsClass } from './class.ts';
 
 type IsEqual<X, Y> = (
 	<E>() => E extends X ? 1 : 2
@@ -62,6 +62,14 @@ class BaseC {
 	static new(): string {
 		return 'new';
 	}
+}
+
+class ProtectedConstructor {
+	protected constructor() {}
+}
+
+class PrivateConstructor {
+	private constructor() {}
 }
 
 Deno.test('Concrete: abstract', () => {
@@ -360,4 +368,46 @@ Deno.test('Class: constructor: abstract', () => {
 	assertInstanceOf(c2, C);
 	assertEquals(c.constructor.C, 3);
 	assertEquals(c.constructor.new(), 'new');
+});
+
+Deno.test('IsClass: simple', () => {
+	function classOnly<T>(c: T & IsClass<T>): string {
+		return typeof c;
+	}
+
+	assertEquals(classOnly(BaseA), 'function');
+	assertEquals(classOnly(BaseC), 'function');
+	assertEquals(classOnly(ProtectedConstructor), 'function');
+	assertEquals(classOnly(PrivateConstructor), 'function');
+	assertEquals(classOnly(Object), 'function');
+	assertEquals(classOnly(Function), 'function');
+	assertEquals(classOnly(class {}), 'function');
+
+	// @ts-expect-error Not a class.
+	assertEquals(classOnly(() => 1), 'function');
+	// @ts-expect-error Not a class.
+	assertEquals(classOnly(function (): void {}), 'function');
+	// @ts-expect-error Not a class.
+	assertEquals(classOnly({ prototype: {} }), 'object');
+
+	// Function type (not recommended) does pass for class.
+	// deno-lint-ignore ban-types
+	assertEquals(classOnly((() => {}) as Function), 'function');
+});
+
+Deno.test('IsClass: base', () => {
+	function getProp<T>(c: T & IsClass<T, { readonly PROP: number }>): number {
+		return c.PROP;
+	}
+
+	class Prop {
+		public static readonly PROP: number = 1;
+	}
+
+	assertEquals(getProp(Prop), 1);
+
+	// @ts-expect-error Missing PROP.
+	assertEquals(getProp(BaseA), undefined);
+	// @ts-expect-error Not a class.
+	assertEquals(getProp({ PROP: 1 }), 1);
 });

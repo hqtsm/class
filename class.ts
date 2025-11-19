@@ -40,3 +40,16 @@ export type Class<C extends object = {}> =
 	& (abstract new (...args: any[]) => any)
 	& { readonly prototype: object }
 	& Omit<C, never>;
+
+/**
+ * Check if a type is a class.
+ *
+ * @template T Type.
+ * @template C Base type.
+ * @returns Class type or never.
+ */
+export type IsClass<T, C extends object = {}> = T extends
+	(Function & { prototype: object } & C)
+	? (T extends (abstract new (...args: any[]) => any) ? T
+		: (T extends ((...args: any[]) => any) ? never : T))
+	: never;
