@@ -26,4 +26,32 @@ Deno.test('toStringTag', () => {
 		Object.getOwnPropertyDescriptor(NotSet.prototype, Symbol.toStringTag),
 		Object.getOwnPropertyDescriptor(Set.prototype, Symbol.toStringTag),
 	);
+
+	class ProtectedConstructor {
+		protected constructor() {}
+		static create(): ProtectedConstructor {
+			return new ProtectedConstructor();
+		}
+		static {
+			toStringTag(ProtectedConstructor, 'ProtectedConstructor');
+		}
+	}
+	assertEquals(
+		String(ProtectedConstructor.create()),
+		'[object ProtectedConstructor]',
+	);
+
+	class PrivateConstructor {
+		private constructor() {}
+		static create(): PrivateConstructor {
+			return new PrivateConstructor();
+		}
+		static {
+			toStringTag(PrivateConstructor, 'PrivateConstructor');
+		}
+	}
+	assertEquals(
+		String(PrivateConstructor.create()),
+		'[object PrivateConstructor]',
+	);
 });
