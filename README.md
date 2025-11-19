@@ -91,27 +91,6 @@ console.assert(total(Baz, 40) === 42);
 
 ## `Class`
 
-Create a generic class type (excludes functions) with optional static members.
-
-```ts
-import type { Class } from '@hqtsm/class';
-
-class Foo {
-	public static readonly MAGIC = 1;
-}
-
-class Bar {
-	public static readonly MAGIC = 2;
-}
-
-function magic(C: Class<{ readonly MAGIC: number }>) {
-	return C.MAGIC;
-}
-
-console.assert(magic(Foo) === 1);
-console.assert(magic(Bar) === 2);
-```
-
 Declaring constructor type for type-safe child statics (late static binding).
 
 ```ts
@@ -139,6 +118,31 @@ class Baz extends Foo {
 
 console.assert(new Bar(40).total() === 41);
 console.assert(new Baz(40).total() === 42);
+```
+
+## `IsClass`
+
+Assert argument is a class of certain properties, even if constructor is not accessible.
+
+```ts
+import type { IsClass } from '@hqtsm/class';
+
+class Foo {
+	protected constructor() {}
+	public static readonly MAGIC = 1;
+}
+
+class Bar {
+	private constructor() {}
+	public static readonly MAGIC = 2;
+}
+
+function magic<T>(C: T & IsClass<T, { readonly MAGIC: number }>) {
+	return C.MAGIC;
+}
+
+console.assert(magic(Foo) === 1);
+console.assert(magic(Bar) === 2);
 ```
 
 ## `ReadonlyKeys`
