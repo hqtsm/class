@@ -404,6 +404,8 @@ Deno.test('IsClass: simple', () => {
 		}
 	}
 
+	assertEquals(Weird.length(), 'weird');
+	assertEquals(Weird.name(), 123);
 	assertEquals(classOnly(Weird), 'function');
 });
 
@@ -430,6 +432,8 @@ Deno.test('IsClass: base', () => {
 		}
 	}
 
+	assertEquals(Weird.length(), 'weird');
+	assertEquals(Weird.name(), 123);
 	assertEquals(getProp(Weird), 1);
 
 	// @ts-expect-error Missing PROP.
