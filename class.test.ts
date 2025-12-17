@@ -393,6 +393,18 @@ Deno.test('IsClass: simple', () => {
 	// Function type (not recommended) does pass for class.
 	// deno-lint-ignore ban-types
 	assertEquals(classOnly((() => {}) as Function), 'function');
+
+	class Weird {
+		public static length(): string {
+			return 'weird';
+		}
+
+		public static name(): number {
+			return 123;
+		}
+	}
+
+	assertEquals(classOnly(Weird), 'function');
 });
 
 Deno.test('IsClass: base', () => {
