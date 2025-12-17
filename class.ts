@@ -49,7 +49,7 @@ export type Class<C extends object = {}> =
  * @returns Class type or never.
  */
 export type IsClass<T, C extends object = {}> = T extends
-	(Function & { prototype: object } & C)
+	(Omit<Function, 'length' | 'name'> & { prototype: object } & C)
 	? (T extends (abstract new (...args: any[]) => any) ? T
 		: (T extends ((...args: any[]) => any) ? never : T))
 	: never;

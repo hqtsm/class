@@ -406,6 +406,20 @@ Deno.test('IsClass: base', () => {
 
 	assertEquals(getProp(Prop), 1);
 
+	class Weird {
+		public static readonly PROP: number = 1;
+
+		public static length(): string {
+			return 'weird';
+		}
+
+		public static name(): number {
+			return 123;
+		}
+	}
+
+	assertEquals(getProp(Weird), 1);
+
 	// @ts-expect-error Missing PROP.
 	assertEquals(getProp(BaseA), undefined);
 	// @ts-expect-error Not a class.
