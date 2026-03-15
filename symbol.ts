@@ -35,12 +35,11 @@ export function hasToStringTag<T>(tag: string, value: T): value is T & {
 	[Symbol.toStringTag]: string;
 } {
 	for (
-		let t;
-		// deno-lint-ignore no-explicit-any
-		(t = (value as any)?.[Symbol.toStringTag]);
-		value = Object.getPrototypeOf(value)
+		let t = Object(value);
+		t && Symbol.toStringTag in t;
+		t = Object.getPrototypeOf(t)
 	) {
-		if (t === tag) {
+		if (t[Symbol.toStringTag] === tag) {
 			return true;
 		}
 	}
