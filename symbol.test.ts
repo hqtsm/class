@@ -90,4 +90,10 @@ Deno.test('hasToStringTag', () => {
 	assertEquals(hasToStringTag({ a: 1, b: 2 }, 'Alpha'), false);
 	assertEquals(hasToStringTag(new Date(), 'Alpha'), false);
 	assertEquals(hasToStringTag(Symbol(), 'Alpha'), false);
+
+	// Narrows type.
+	const unk: unknown = new Alpha();
+	if (hasToStringTag(unk, 'Alpha')) {
+		assertEquals(unk[Symbol.toStringTag], 'Alpha');
+	}
 });
