@@ -27,11 +27,11 @@ export function toStringTag<T>(
 /**
  * Check if value has Symbol.toStringTag in prototype chain.
  *
- * @param value Value.
  * @param tag String tag value.
+ * @param value Value.
  * @returns True if value has Symbol.toStringTag in prototype chain.
  */
-export function hasToStringTag<T>(value: T, tag: string): value is T & {
+export function hasToStringTag<T>(tag: string, value: T): value is T & {
 	[Symbol.toStringTag]: string;
 } {
 	for (

@@ -69,31 +69,31 @@ Deno.test('hasToStringTag', () => {
 		}
 	}
 
-	assertEquals(hasToStringTag(new Alpha(), 'Alpha'), true);
-	assertEquals(hasToStringTag(new Beta(), 'Beta'), true);
-	assertEquals(hasToStringTag(new Beta(), 'Alpha'), true);
-	assertEquals(hasToStringTag(new Alpha(), 'Beta'), false);
-	assertEquals(hasToStringTag(new Alpha(), 'alpha'), false);
-	assertEquals(hasToStringTag(null, 'Alpha'), false);
-	assertEquals(hasToStringTag(undefined, 'Alpha'), false);
-	assertEquals(hasToStringTag(0, 'Alpha'), false);
-	assertEquals(hasToStringTag(42, 'Alpha'), false);
-	assertEquals(hasToStringTag(0n, 'Alpha'), false);
-	assertEquals(hasToStringTag(42n, 'Alpha'), false);
-	assertEquals(hasToStringTag(true, 'Alpha'), false);
-	assertEquals(hasToStringTag(false, 'Alpha'), false);
-	assertEquals(hasToStringTag('', 'Alpha'), false);
-	assertEquals(hasToStringTag('string', 'Alpha'), false);
-	assertEquals(hasToStringTag([], 'Alpha'), false);
-	assertEquals(hasToStringTag([1, 2, 3], 'Alpha'), false);
-	assertEquals(hasToStringTag({}, 'Alpha'), false);
-	assertEquals(hasToStringTag({ a: 1, b: 2 }, 'Alpha'), false);
-	assertEquals(hasToStringTag(new Date(), 'Alpha'), false);
-	assertEquals(hasToStringTag(Symbol(), 'Alpha'), false);
+	assertEquals(hasToStringTag('Alpha', new Alpha()), true);
+	assertEquals(hasToStringTag('Beta', new Beta()), true);
+	assertEquals(hasToStringTag('Alpha', new Beta()), true);
+	assertEquals(hasToStringTag('Beta', new Alpha()), false);
+	assertEquals(hasToStringTag('alpha', new Alpha()), false);
+	assertEquals(hasToStringTag('Alpha', null), false);
+	assertEquals(hasToStringTag('Alpha', undefined), false);
+	assertEquals(hasToStringTag('Alpha', 0), false);
+	assertEquals(hasToStringTag('Alpha', 42), false);
+	assertEquals(hasToStringTag('Alpha', 0n), false);
+	assertEquals(hasToStringTag('Alpha', 42n), false);
+	assertEquals(hasToStringTag('Alpha', true), false);
+	assertEquals(hasToStringTag('Alpha', false), false);
+	assertEquals(hasToStringTag('Alpha', ''), false);
+	assertEquals(hasToStringTag('Alpha', 'string'), false);
+	assertEquals(hasToStringTag('Alpha', []), false);
+	assertEquals(hasToStringTag('Alpha', [1, 2, 3]), false);
+	assertEquals(hasToStringTag('Alpha', {}), false);
+	assertEquals(hasToStringTag('Alpha', { a: 1, b: 2 }), false);
+	assertEquals(hasToStringTag('Alpha', new Date()), false);
+	assertEquals(hasToStringTag('Alpha', Symbol()), false);
 
 	// Narrows type.
 	const unk: unknown = new Alpha();
-	if (hasToStringTag(unk, 'Alpha')) {
+	if (hasToStringTag('Alpha', unk)) {
 		assertEquals(unk[Symbol.toStringTag], 'Alpha');
 	}
 });
