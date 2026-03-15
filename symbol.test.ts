@@ -1,5 +1,5 @@
 import { assertEquals } from '@std/assert';
-import { hasToStringTag, toStringTag } from './symbol.ts';
+import { hasToStringTag, isToStringTag, toStringTag } from './symbol.ts';
 
 Deno.test('toStringTag', () => {
 	class Alpha {}
@@ -104,4 +104,46 @@ Deno.test('hasToStringTag', () => {
 
 	// Weird but it works.
 	assertEquals(hasToStringTag('Alpha', new Undef()), true);
+});
+
+Deno.test('isToStringTag', () => {
+	class Alpha {
+		public a = 1;
+		static {
+			toStringTag(this, 'Alpha');
+		}
+	}
+
+	class Beta extends Alpha {
+		public b = 2;
+		static {
+			toStringTag(this, 'Beta');
+		}
+	}
+
+	class Unrelated {
+		static {
+			toStringTag(this, 'Unrelated');
+		}
+	}
+
+	class Untagged {}
+
+	assertEquals(isToStringTag(Alpha, new Alpha()), true);
+	assertEquals(isToStringTag(Beta, new Alpha()), false);
+	assertEquals(isToStringTag(Alpha, new Beta()), true);
+	assertEquals(isToStringTag(Alpha, new Unrelated()), false);
+	assertEquals(isToStringTag(Alpha, new Untagged()), false);
+	assertEquals(isToStringTag(Untagged, new Alpha()), false);
+
+	const alpha = new Alpha();
+	if (isToStringTag(Alpha, alpha)) {
+		assertEquals(alpha.a, 1);
+	}
+
+	const beta = new Beta();
+	if (isToStringTag(Beta, beta)) {
+		assertEquals(beta.a, 1);
+		assertEquals(beta.b, 2);
+	}
 });
