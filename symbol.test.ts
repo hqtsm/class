@@ -69,6 +69,17 @@ Deno.test('hasToStringTag', () => {
 		}
 	}
 
+	class Undef extends Alpha {
+		static {
+			Object.defineProperty(this.prototype, Symbol.toStringTag, {
+				value: undefined,
+				configurable: true,
+				enumerable: false,
+				writable: false,
+			});
+		}
+	}
+
 	assertEquals(hasToStringTag('Alpha', new Alpha()), true);
 	assertEquals(hasToStringTag('Beta', new Beta()), true);
 	assertEquals(hasToStringTag('Alpha', new Beta()), true);
@@ -96,4 +107,7 @@ Deno.test('hasToStringTag', () => {
 	if (hasToStringTag('Alpha', unk)) {
 		assertEquals(unk[Symbol.toStringTag], 'Alpha');
 	}
+
+	// Weird but it works.
+	assertEquals(hasToStringTag('Alpha', new Undef()), true);
 });
