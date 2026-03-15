@@ -1,5 +1,5 @@
 import { assertEquals } from '@std/assert';
-import { toStringTag } from './symbol.ts';
+import { hasToStringTag, toStringTag } from './symbol.ts';
 
 Deno.test('toStringTag', () => {
 	class Alpha {}
@@ -54,4 +54,40 @@ Deno.test('toStringTag', () => {
 		String(PrivateConstructor.create()),
 		'[object PrivateConstructor]',
 	);
+});
+
+Deno.test('hasToStringTag', () => {
+	class Alpha {
+		static {
+			toStringTag(this, 'Alpha');
+		}
+	}
+
+	class Beta extends Alpha {
+		static {
+			toStringTag(this, 'Beta');
+		}
+	}
+
+	assertEquals(hasToStringTag(new Alpha(), 'Alpha'), true);
+	assertEquals(hasToStringTag(new Beta(), 'Beta'), true);
+	assertEquals(hasToStringTag(new Beta(), 'Alpha'), true);
+	assertEquals(hasToStringTag(new Alpha(), 'Beta'), false);
+	assertEquals(hasToStringTag(new Alpha(), 'alpha'), false);
+	assertEquals(hasToStringTag(null, 'Alpha'), false);
+	assertEquals(hasToStringTag(undefined, 'Alpha'), false);
+	assertEquals(hasToStringTag(0, 'Alpha'), false);
+	assertEquals(hasToStringTag(42, 'Alpha'), false);
+	assertEquals(hasToStringTag(0n, 'Alpha'), false);
+	assertEquals(hasToStringTag(42n, 'Alpha'), false);
+	assertEquals(hasToStringTag(true, 'Alpha'), false);
+	assertEquals(hasToStringTag(false, 'Alpha'), false);
+	assertEquals(hasToStringTag('', 'Alpha'), false);
+	assertEquals(hasToStringTag('string', 'Alpha'), false);
+	assertEquals(hasToStringTag([], 'Alpha'), false);
+	assertEquals(hasToStringTag([1, 2, 3], 'Alpha'), false);
+	assertEquals(hasToStringTag({}, 'Alpha'), false);
+	assertEquals(hasToStringTag({ a: 1, b: 2 }, 'Alpha'), false);
+	assertEquals(hasToStringTag(new Date(), 'Alpha'), false);
+	assertEquals(hasToStringTag(Symbol(), 'Alpha'), false);
 });

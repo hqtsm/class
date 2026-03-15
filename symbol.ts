@@ -23,3 +23,26 @@ export function toStringTag<T>(
 		writable: false,
 	});
 }
+
+/**
+ * Check if value has Symbol.toStringTag in prototype chain.
+ *
+ * @param value Value.
+ * @param tag String tag value.
+ * @returns True if value has Symbol.toStringTag in prototype chain.
+ */
+export function hasToStringTag<T>(value: T, tag: string): value is T & {
+	[Symbol.toStringTag]: string;
+} {
+	for (
+		let t;
+		// deno-lint-ignore no-explicit-any
+		(t = (value as any)?.[Symbol.toStringTag]);
+		value = Object.getPrototypeOf(value)
+	) {
+		if (t === tag) {
+			return true;
+		}
+	}
+	return false;
+}
