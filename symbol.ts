@@ -3,6 +3,7 @@
  *
  * Symbol utilities.
  */
+// deno-lint-ignore-file no-explicit-any explicit-module-boundary-types
 
 import type { IsClass } from './class.ts';
 
@@ -31,7 +32,7 @@ export function toStringTag<T>(
  * @param value Value.
  * @returns True if value has Symbol.toStringTag in prototype chain.
  */
-export function hasToStringTag<T>(tag: string, value: T): value is T {
+export function hasToStringTag(tag: string, value: any): boolean {
 	for (
 		let t = Object(value);
 		t && Symbol.toStringTag in t;
