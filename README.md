@@ -236,3 +236,42 @@ console.assert(hasToStringTag('Alpha', new Beta()));
 console.assert(hasToStringTag('Beta', new Beta()));
 console.assert(!hasToStringTag('Beta', new Alpha()));
 ```
+
+## `isToStringTag`
+
+Check if object is instance of a class based on `Symbol.toStringTag`.
+
+```ts
+import { isToStringTag, toStringTag } from '@hqtsm/class';
+
+class Alpha {
+	public a = 1;
+	static {
+		toStringTag(this, 'Alpha');
+	}
+}
+
+class Beta extends Alpha {
+	public b = 2;
+	static {
+		toStringTag(this, 'Beta');
+	}
+}
+
+const alpha = new Alpha();
+const beta = new Beta();
+
+console.assert(isToStringTag(Alpha, alpha));
+console.assert(isToStringTag(Alpha, beta));
+console.assert(isToStringTag(Beta, beta));
+console.assert(!isToStringTag(Beta, alpha));
+
+if (isToStringTag(Alpha, alpha)) {
+	console.assert(alpha.a === 1);
+}
+
+if (isToStringTag(Beta, beta)) {
+	console.assert(beta.a === 1);
+	console.assert(beta.b === 2);
+}
+```
