@@ -10,6 +10,7 @@ import type { Class, IsClass } from './class.ts';
 /**
  * Define Symbol.toStringTag for class.
  *
+ * @template T Type.
  * @param Class Class.
  * @param value String tag value.
  */
@@ -48,6 +49,7 @@ export function hasToStringTag(tag: string, value: any): boolean {
 /**
  * Check if value is type of type by Symbol.toStringTag.
  *
+ * @template T Type.
  * @param Type Type.
  * @param value Value.
  * @returns True if value is type of type by Symbol.toStringTag.
