@@ -211,3 +211,28 @@ class Bar {
 console.assert(String(new Foo()) === '[object Foo]');
 console.assert(String(new Bar()) === '[object Bar]');
 ```
+
+## `hasToStringTag`
+
+Check if object has `Symbol.toStringTag` anywhere in prototype chain.
+
+```ts
+import { hasToStringTag, toStringTag } from '@hqtsm/class';
+
+class Alpha {
+	static {
+		toStringTag(this, 'Alpha');
+	}
+}
+
+class Beta extends Alpha {
+	static {
+		toStringTag(this, 'Beta');
+	}
+}
+
+console.assert(hasToStringTag('Alpha', new Alpha()));
+console.assert(hasToStringTag('Alpha', new Beta()));
+console.assert(hasToStringTag('Beta', new Beta()));
+console.assert(!hasToStringTag('Beta', new Alpha()));
+```
