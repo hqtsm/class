@@ -102,12 +102,6 @@ Deno.test('hasToStringTag', () => {
 	assertEquals(hasToStringTag('Alpha', new Date()), false);
 	assertEquals(hasToStringTag('Alpha', Symbol()), false);
 
-	// Narrows type.
-	const unk: unknown = new Alpha();
-	if (hasToStringTag('Alpha', unk)) {
-		assertEquals(unk[Symbol.toStringTag], 'Alpha');
-	}
-
 	// Weird but it works.
 	assertEquals(hasToStringTag('Alpha', new Undef()), true);
 });

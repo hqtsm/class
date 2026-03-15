@@ -31,9 +31,7 @@ export function toStringTag<T>(
  * @param value Value.
  * @returns True if value has Symbol.toStringTag in prototype chain.
  */
-export function hasToStringTag<T>(tag: string, value: T): value is T & {
-	[Symbol.toStringTag]: string;
-} {
+export function hasToStringTag<T>(tag: string, value: T): value is T {
 	for (
 		let t = Object(value);
 		t && Symbol.toStringTag in t;
