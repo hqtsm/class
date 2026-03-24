@@ -5,7 +5,7 @@
  */
 // deno-lint-ignore-file no-explicit-any explicit-module-boundary-types
 
-import type { Class, IsClass } from './class.ts';
+import type { IsClass } from './class.ts';
 
 /**
  * Define Symbol.toStringTag for class.
@@ -54,8 +54,8 @@ export function hasToStringTag(tag: string, value: any): boolean {
  * @param value Value.
  * @returns True if value is type of type by Symbol.toStringTag.
  */
-export function isToStringTag<T extends Class>(
-	Type: T,
+export function isToStringTag<T extends { prototype: any }>(
+	Type: T & IsClass<T>,
 	value: any,
 ): value is T['prototype'] {
 	const tag = (Type.prototype as { [Symbol.toStringTag]: unknown })[

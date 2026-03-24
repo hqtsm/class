@@ -129,6 +129,14 @@ Deno.test('isToStringTag', () => {
 
 	class Untagged {}
 
+	class Protected {
+		protected constructor() {}
+	}
+
+	class Private {
+		private constructor() {}
+	}
+
 	assertEquals(isToStringTag(Alpha, new Alpha()), true);
 	assertEquals(isToStringTag(Beta, new Alpha()), false);
 	assertEquals(isToStringTag(Alpha, new Beta()), true);
@@ -146,4 +154,7 @@ Deno.test('isToStringTag', () => {
 		assertEquals(beta.a, 1);
 		assertEquals(beta.b, 2);
 	}
+
+	assertEquals(isToStringTag(Protected, new Alpha()), false);
+	assertEquals(isToStringTag(Private, new Alpha()), false);
 });
